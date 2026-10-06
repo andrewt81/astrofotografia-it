@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @default(cuid())
+  username String @unique
+  displayName String
+  avatarUrl String?
+  createdAt DateTime @default(now())
+  projects Project[]
+  comments Comment[]
+  likes Like[]
+}
+
+model Project {
+  id String @id @default(cuid())
+  slug String @unique
+  title String
+  description String?
+  objectName String?
+  authorId String
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  versions MediaVersion[]
+  comments Comment[]
+  likes Like[]
+}
+
+model MediaVersion {
+  id String @id @default(cuid())
+  projectId String
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  version Int
+  note String?
+  originalName String
+  mimeType String
+  mediaKind String
+  byteSize Int
+  sha256 String
+  storageKey String
+  previewUrl String?
+  width Int?
+  height Int?
+  capturedAt DateTime?
+  equipmentJson String?
+  plateSolveJson String?
+  createdAt DateTime @default(now())
+  @@unique([projectId, version])
+}
+
+model Comment {
+  id String @id @default(cuid())
+  body String
+  authorId String
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  projectId String
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+model Like {
+  userId String
+  projectId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  @@id([userId, projectId])
+}

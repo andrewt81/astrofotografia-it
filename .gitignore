@@ -1,0 +1,8 @@
+node_modules
+.next
+.env
+data
+public/uploads
+*.db
+*.db-journal
+*.log
