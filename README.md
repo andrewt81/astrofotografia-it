@@ -25,7 +25,9 @@ docker compose up -d --build
 docker compose exec web npm run db:seed
 ```
 
-Database e originali persistono nel volume `astro-data`.
+PostgreSQL e RustFS persistono rispettivamente nei volumi `postgres-data` e `rustfs-data`.
+
+Per la configurazione consigliata con SiteGround GrowBig e storage self-hosted sulla VPS, consulta [docs/deployment-siteground-vps.md](docs/deployment-siteground-vps.md).
 
 ## Formati
 
@@ -39,8 +41,8 @@ Gli originali non vengono modificati. Le future anteprime RAW/FITS saranno file 
 ## Architettura prevista
 
 - Next.js + TypeScript
-- PostgreSQL in produzione (SQLite per il prototipo locale)
-- S3/MinIO per originali e derivati
+- PostgreSQL per sviluppo e produzione
+- RustFS self-hosted tramite API S3 per originali e derivati
 - worker Python con LibRaw/Astropy e astrometry.net
 - coda asincrona per anteprime, istogrammi e plate solving
 

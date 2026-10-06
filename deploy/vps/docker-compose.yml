@@ -1,0 +1,27 @@
+services:
+  rustfs:
+    image: rustfs/rustfs:1.0.1
+    container_name: astrofotografia-storage
+    restart: unless-stopped
+    environment:
+      RUSTFS_ACCESS_KEY: ${S3_ACCESS_KEY:?Set S3_ACCESS_KEY}
+      RUSTFS_SECRET_KEY: ${S3_SECRET_KEY:?Set S3_SECRET_KEY}
+      RUSTFS_ADDRESS: ":9000"
+      RUSTFS_CONSOLE_ADDRESS: ":9001"
+      RUSTFS_CONSOLE_ENABLE: "true"
+      RUSTFS_OBS_LOGGER_LEVEL: error
+    volumes:
+      - ${RUSTFS_DATA_PATH:-/srv/astrofotografia/storage}:/data
+    ports:
+      - "127.0.0.1:9001:9001"
+    networks:
+      - traefik
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.astro-storage.rule=Host(`s3.astrofotografia.it`)
+      - traefik.http.routers.astro-storage.entrypoints=websecure
+      - traefik.http.routers.astro-storage.tls=true
+      - traefik.http.services.astro-storage.loadbalancer.server.port=9000
+networks:
+  traefik:
+    external: true

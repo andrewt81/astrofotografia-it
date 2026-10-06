@@ -1,3 +1,3 @@
-import "./styles.css"; import "./features.css"; import { currentUser } from "@/lib/auth";
+import "./styles.css"; import "./features.css"; import "./storage.css"; import { currentUser } from "@/lib/auth";
 export const metadata = { title: "Astrofotografia.it", description: "La community italiana dell'astrofotografia", icons:{icon:"/favicon.svg"} };
 export default async function RootLayout({children}:{children:React.ReactNode}) {const user=await currentUser();return <html lang="it"><body><header><a className="brand" href="/"><span>✦</span> astrofotografia.it</a><nav><a href="/">Esplora</a><a href="/contest">Contest</a>{user?<><a href="/upload" className="upload">Carica media</a><form action="/api/auth/logout" method="post"><button className="navbutton">@{user.username} · Esci</button></form></>:<a href="/auth" className="upload">Accedi</a>}</nav></header>{children}<footer>Progetto open source · AGPL-3.0 · Astrofotografia.it</footer></body></html>; }

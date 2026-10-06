@@ -13,8 +13,22 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: astrofotografia
+          POSTGRES_USER: astrofotografia
+          POSTGRES_PASSWORD: test-password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U astrofotografia"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     env:
-      DATABASE_URL: file:./ci.db
+      DATABASE_URL: postgresql://astrofotografia:test-password@localhost:5432/astrofotografia?schema=public
       UPLOAD_DIR: ./data/uploads
       MAX_UPLOAD_MB: "25"
     steps:
@@ -29,3 +43,30 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: npm audit --omit=dev --audit-level=high
+  storage-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      rustfs:
+        image: rustfs/rustfs:1.0.1
+        env:
+          RUSTFS_ACCESS_KEY: ci-access-key
+          RUSTFS_SECRET_KEY: ci-secret-key-change-me
+          RUSTFS_ADDRESS: ":9000"
+        ports:
+          - 9000:9000
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Wait for S3 endpoint
+        run: for i in {1..30}; do curl -fsS http://127.0.0.1:9000/health && exit 0; sleep 2; done; exit 1
+      - name: Verify S3 round trip
+        run: node tests/s3-smoke.mjs
+        env:
+          S3_ENDPOINT: http://127.0.0.1:9000
+          S3_ACCESS_KEY: ci-access-key
+          S3_SECRET_KEY: ci-secret-key-change-me

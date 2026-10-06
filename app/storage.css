@@ -1,0 +1,1 @@
+.progress{height:7px;background:#080d19;border-radius:10px;overflow:hidden}.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--violet));transition:width .25s}.form button:disabled{opacity:.65;cursor:wait}
