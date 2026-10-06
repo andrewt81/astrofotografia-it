@@ -1,0 +1,14 @@
+services:
+  web:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: file:/app/data/astrofotografia.db
+      UPLOAD_DIR: /app/data/uploads
+      MAX_UPLOAD_MB: "250"
+    volumes:
+      - astro-data:/app/data
+volumes:
+  astro-data:

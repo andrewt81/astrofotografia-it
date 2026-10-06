@@ -1,0 +1,2 @@
+import { describe,expect,it } from "vitest"; import { commentSchema,registerSchema } from "../lib/validation";
+describe("input validation",()=>{it("normalizes usernames",()=>{expect(registerSchema.parse({username:" Andrea_81 ",displayName:"Andrea",password:"una-password-lunga"}).username).toBe("andrea_81")});it("rejects weak passwords",()=>{expect(registerSchema.safeParse({username:"andrea",displayName:"Andrea",password:"corta"}).success).toBe(false)});it("limits comments",()=>{expect(commentSchema.safeParse({body:"x".repeat(2001)}).success).toBe(false)})});

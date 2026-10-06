@@ -4,7 +4,7 @@ Community open source per astrofotografi: pubblicazione di foto, GIF e brevi vid
 
 ## Stato
 
-MVP in sviluppo. Sono operative galleria, pagina progetto, upload locale sicuro, versioni nel modello dati, conservazione e download dell'originale con impronta SHA-256. Autenticazione, worker RAW/FITS, object storage S3 e plate solving asincrono sono nella roadmap.
+MVP funzionante. Sono operative registrazione e accesso, galleria, pagina progetto, upload sicuro, revisioni, like, commenti, contest con voto, conservazione e download dell'originale con impronta SHA-256. Worker RAW/FITS, object storage S3 e plate solving asincrono sono nella roadmap produttiva.
 
 ## Avvio locale
 
@@ -12,10 +12,20 @@ MVP in sviluppo. Sono operative galleria, pagina progetto, upload locale sicuro,
 cp .env.example .env
 npm install
 npm run db:push
+npm run db:seed
 npm run dev
 ```
 
-Apri http://localhost:3000. In sviluppo viene creato al primo upload un utente dimostrativo.
+Apri http://localhost:3000 e crea il primo account.
+
+## Docker
+
+```bash
+docker compose up -d --build
+docker compose exec web npm run db:seed
+```
+
+Database e originali persistono nel volume `astro-data`.
 
 ## Formati
 
@@ -37,6 +47,10 @@ Gli originali non vengono modificati. Le future anteprime RAW/FITS saranno file 
 ## Contribuire
 
 Issue e pull request sono benvenute. Prima di lavorare su una funzionalità ampia, apri una issue descrivendo proposta e impatto.
+
+## Verifiche automatiche
+
+GitHub Actions esegue su ogni push e pull request: installazione riproducibile, generazione e verifica dello schema Prisma, test, build di produzione e controllo delle vulnerabilità ad alta gravità.
 
 ## Licenza
 

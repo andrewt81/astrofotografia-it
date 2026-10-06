@@ -1,0 +1,2 @@
+import { describe,expect,it } from "vitest"; import { extension,mediaKind,allowedExtensions } from "../lib/media";
+describe("media formats",()=>{it("recognizes scientific and camera formats",()=>{expect(mediaKind("light.CR3")).toBe("RAW");expect(mediaKind("stack.FITS")).toBe("FITS");expect(mediaKind("animation.gif")).toBe("GIF")});it("rejects executable extensions",()=>{expect(allowedExtensions.has(extension("payload.exe"))).toBe(false)});it("recognizes video",()=>{expect(mediaKind("moon.webm")).toBe("VIDEO")})});
