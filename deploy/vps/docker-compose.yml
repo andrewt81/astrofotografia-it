@@ -11,14 +11,14 @@ services:
       RUSTFS_CONSOLE_ENABLE: "true"
       RUSTFS_OBS_LOGGER_LEVEL: error
     volumes:
-      - ${RUSTFS_DATA_PATH:-/srv/astrofotografia/storage}:/data
+      - ${RUSTFS_DATA_PATH:-/srv/app-storage}:/data
     ports:
       - "127.0.0.1:9001:9001"
     networks:
       - traefik
     labels:
       - traefik.enable=true
-      - traefik.http.routers.astro-storage.rule=Host(`s3.astrofotografia.it`)
+      - traefik.http.routers.astro-storage.rule=Host(`s3.example.com`)
       - traefik.http.routers.astro-storage.entrypoints=websecure
       - traefik.http.routers.astro-storage.tls=true
       - traefik.http.services.astro-storage.loadbalancer.server.port=9000

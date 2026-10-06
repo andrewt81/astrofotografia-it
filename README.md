@@ -27,7 +27,7 @@ docker compose exec web npm run db:seed
 
 PostgreSQL e RustFS persistono rispettivamente nei volumi `postgres-data` e `rustfs-data`.
 
-Per la configurazione consigliata con SiteGround GrowBig e storage self-hosted sulla VPS, consulta [docs/deployment-siteground-vps.md](docs/deployment-siteground-vps.md).
+Per configurare uno storage S3-compatible self-hosted, consulta [docs/self-hosted-s3.md](docs/self-hosted-s3.md).
 
 ## Formati
 
